@@ -1,0 +1,64 @@
+{% extends 'home/layout.html' %}
+
+{% load static %}
+
+{% block title %}Your Circle{% endblock %}
+
+{% block body %}
+
+{% if player.circle %}
+
+<div class="header-div">
+    <div>
+        <div class="circle-img-div">
+            <img src="{% static 'home/circle.jpg' %}" class="circle-img">
+        </div>
+        <div class="circle-info">
+            <div class="circle-name">{{ circle.name }}</div>
+            <div class="circle-fact">{{ player_count }} Members | Created on {{ circle.date }}</div>
+        </div>
+    </div>
+    <div>Invite Others: {{ request.build_absolute_uri }}join/{{ user.player.circle.code }}/</div>
+</div>
+
+<div class="space"></div>
+<div class="space"></div>
+
+<div class="header-div">
+    <div>
+        <h5>Members ({{ player_count }})</h5>
+        <div class="space"></div>
+        <table class="leaderboard">
+                <tr>
+                    <th>Name</th>
+                    <th>Rating</th>
+                </tr>
+            {% for player in players %}
+                <tr>
+                    <td class="player">{{ player }}</td>
+                    <td class="rating">{{ player.rating }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="pending-scores">
+        {% for set in pending %}
+            <div>
+                <strong>Pending Set</strong>: You vs. {{ set.player_1 }}: {{ set.player_2_games }}-{{ set.player_1_games }}&emsp;Is this score correct? <form method="post" action="{% url 'circle:score_confirm' set.id %}" class="response">{% csrf_token %}<input type="submit" value="Yes"></form> <form method="post" action="{% url 'circle:score_reject' set.id %}" class="response">{% csrf_token %}<input type="submit" value="No"></form>
+            </div>
+        {% empty %}
+            <div>No pending sets.</div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="space"></div>
+<div class="space"></div>
+
+{% endif %}
+
+{% if not player.circle %}
+    <p>You have not joined or created a Circle yet. Paste your invite link into the search bar to join a friend's Circle. Alternatively, you can create a new Circle <a href="{% url 'circle:create_circle' %}">here</a>.</p>
+{% endif %}
+
+{% endblock %}

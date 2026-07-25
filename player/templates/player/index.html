@@ -1,0 +1,62 @@
+{% extends 'home/layout.html' %}
+
+{% load static %}
+
+{% block title %}Your Profile{% endblock %}
+
+{% block body %}
+
+<div class="header-div">
+    <div>
+        <div class="circle-img-div">
+            <img src="{% static 'home/player.png' %}" class="player-img">
+        </div>
+        <div class="circle-info">
+            <div class="player-name">{{ player }}</div>
+        </div>
+    </div>
+    <div class="player-name">Rating: {{ player.rating }}</div>
+</div>
+
+<div class="space"></div>
+<div class="space"></div>
+
+<p>Username: {{ request.user.username }}</p>
+<p>Played a set with someone in your Circle? <a href="{% url 'player:score_submit' %}">Submit score</a>.</p>
+<p>*To change your name, update your email, or leave your Circle, contact support at: christian.mkcc@gmail.com</p>
+
+<div class="space"></div>
+
+<h5>Set History</h5>
+<div class="space"></div>
+
+<h6>W/L: {{ wins }} - {{ losses }}</h6>
+<div class="space"></div>
+
+{% for set in player.sets reversed %}
+    <table class="history-table">
+        <tr>
+            <td class="number-1">{{ set.player_1.rating }}</td>
+            <td class="name">{% if set.winner == set.player_1 %}<strong>{{ set.player_1 }}</strong>{% else %}<span class="lost">{{ set.player_1 }}</span>{% endif %}</td>
+            <td class="number-2">{% if set.winner == set.player_1 %}<strong>{{ set.player_1_games }}</strong>{% else %}<span class="lost">{{ set.player_1_games }}</span>{% endif %}</td>
+        </tr>
+        <tr>
+            <td class="number-1">{{ set.player_2.rating }}</td>
+            <td class="name">{% if set.winner == set.player_2 %}<strong>{{ set.player_2 }}</strong>{% else %}<span class="lost">{{ set.player_2 }}</span>{% endif %}</td>
+            <td class="number-2">{% if set.winner == set.player_2 %}<strong>{{ set.player_2_games }}</strong>{% else %}<span class="lost">{{ set.player_2_games }}</span>{% endif %}</td>
+        </tr>
+    </table>
+    <div class="space"></div>
+    <div class="space"></div>
+{% empty %}
+    <div>You have not played any sets.</div>
+{% endfor %}
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="space"></div>
+        <p>{{ message }}</p>
+    {% endfor %}
+{% endif %}
+
+{% endblock %}

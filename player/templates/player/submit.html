@@ -1,0 +1,32 @@
+{% extends 'home/layout.html' %}
+
+{% block title %}Submit a Score{% endblock %}
+
+{% block body %}
+
+<form method="post">
+    {% csrf_token %}
+    <p>Enter your set score below (only completed sets will be accepted):</p>
+    <div class="space"></div>
+    <table class="score-table">
+        <tr>
+            <td>You</td>
+            <td>{{ form.player_1_games }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.player_2 }}</td>
+            <td>{{ form.player_2_games }}</td>
+        </tr>
+    </table>
+    <div class="space"></div>
+    {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+            <p>{{ error }}</p>
+        {% endfor %}
+    {% endif %}
+    <div class="space"></div>
+    <input type="submit" value="Submit Score">
+</form>
+
+
+{% endblock %}

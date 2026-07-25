@@ -1,0 +1,168 @@
+/* General Layout */
+
+.nav-bar {
+    background-color: #6CC48D;
+    padding: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.content {
+    padding: 8px;
+}
+
+.links {
+    display: inline;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+#logo {
+    padding-left: 0;
+}
+
+.logo {
+    width: 36px;
+}
+
+.link {
+    color: black;
+    text-decoration: none;
+    vertical-align: middle;
+}
+
+.link:hover {
+    color: gray;
+    text-decoration: none;
+}
+
+.space {
+    height: 16px;
+}
+
+/* Home Page */
+.header-div {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.greeting {
+    font-size: 22px;
+}
+
+/* Your Circle Page */
+.circle-img-div {
+    display: inline-block;
+    padding-right: 16px;
+}
+
+.circle-img {
+    width: 120px;
+}
+
+.circle-info {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.circle-name {
+    font-size: 24px;
+}
+
+.circle-fact {
+    font-size: 12px;
+}
+
+.leaderboard th {
+    color: gray;
+    font-size: 12px;
+    font-weight: normal;
+    padding: 4px;
+}
+
+.leaderboard td {
+    border-bottom: 1px solid lightgray;
+    border-top: 1px solid lightgray;
+    padding: 4px;
+}
+
+.player {
+    border-left: none;
+    width: 200px;
+}
+
+.rating {
+    border-right: none;
+    text-align: center;
+}
+
+.pending-scores {
+    border: 1px solid lightgray;
+    border-radius: 8px;
+    padding: 8px;
+    width: fit-content;
+}
+
+.response {
+    display: inline;
+}
+
+/* Your Profile Page */
+.player-img {
+    width: 80px;
+}
+
+.player-name {
+    font-size: 28px;
+}
+
+.history-table {
+    border: 1px solid lightgray;
+}
+
+.history-table td {
+    border: 1px solid lightgray;
+    padding: 4px;
+}
+
+.number-1 {
+    text-align: center;
+    width: 80px;
+}
+
+.number-2 {
+    text-align: center;
+    width: 40px;
+}
+
+.name {
+    width: 400px;
+}
+
+.lost {
+    color: gray;
+}
+
+/* Sumbit Score Page */
+.score-table {
+    border: 1px solid lightgray;
+}
+
+.score-table td {
+    border: 1px solid lightgray;
+    padding: 8px;
+}
+
+.sub-name {
+    border: none;
+    width: 200px;
+}
+
+.sub-number {
+    border: none;
+    text-align: center;
+    width: 50px;
+}

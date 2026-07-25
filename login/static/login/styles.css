@@ -1,0 +1,43 @@
+/* Login Page Only */
+
+.welcome {
+    font-size: 30px;
+    text-align: center;
+}
+
+.centered {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.content {
+    background-color: white;
+    box-shadow: 0 0 1px 2px lightgray;
+    padding: 12px;
+    width: 100%;
+}
+
+.fields {
+    width: 80%;
+}
+
+.field {
+    width: 100%;
+}
+
+.logo {
+    width: 20%;
+}
+
+.message {
+    text-align: center;
+}
+
+.error {
+    color: red;
+}
+
+.space {
+    height: 16px;
+}

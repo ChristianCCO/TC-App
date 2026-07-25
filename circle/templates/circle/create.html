@@ -1,0 +1,16 @@
+{% extends 'home/layout.html' %}
+
+{% block title %}Create a Circle{% endblock %}
+
+{% block body %}
+
+<h5>Create a Circle</h5>
+<div class="space"></div>
+
+<form method="post">
+    {% csrf_token %}
+    <input type="text" name="name" placeholder="Name Your Circle">
+    <input type="submit" value="Create Circle">
+</form>
+
+{% endblock %}
