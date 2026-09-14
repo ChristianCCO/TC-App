@@ -1,74 +1,9 @@
-🎾 Tennis Circle
-
-A full-stack Django web application that allows users to create competitive tennis circles, submit match results, and track rankings using an ELO rating system.
-
-
-👤 Authentication
-
-• User signup, login, and logout
-• Automatic Player creation
-
-🧑‍🤝‍🧑 Circles (Groups)
-
-• Users can create or join a Circle via invite link
-• Each player belongs to exactly one Circle
-• Matches are restricted within Circles
-
-🎾 Match Submission
-
-• Submit tennis set scores against other players
-• Built-in validation for real tennis rules
-• Prevents invalid or duplicate matches
-
-✅ Match Confirmation System
-
-• Opponent can confirm or reject submitted matches
-• Only confirmed matches affect rankings
-• Pending matches visible in dashboard
-
-🏆 ELO Rating System
-
-• Dynamic skill-based ranking
-• Ratings update after each confirmed match
-• Fair adjustments based on opponent strength
-
-📊 Player Profiles
-
-• View rating and match history
-• Win/loss tracking
-
-🧠 Tech Stack
-
-• Frontend: Django Templates (HTML/CSS)
-• Backend: Django (Python)
-• Database: SQLite (dev) / PostgreSQL (prod-ready)
-• Auth: Django built-in authentication
-
-🏗️ Architecture Overview
-
-• User → Django auth system
-• Player → One-to-one extension of User
-• Circle → Groups of players
-• Set → Match records
-
-⚙️ Key Concepts Implemented
-
-• Relational data modeling
-• Business logic validation (tennis scoring rules)
-• Stateful workflows (pending → confirmed matches)
-• ELO rating algorithm
-• Access control and permissions
-
-🔮 Future Improvements
-
-• ELO graphs and visualizations
-• Notifications for pending matches
-• Mobile-friendly UI
-• REST API (Django REST Framework)
-
-📚 What I Learned
-
-• Designing relational data models for real-world systems
-• Implementing multi-user workflows and permissions
-• Building a ranking system using ELO
-• Structuring Django apps for scalability
+<p>Technical Details</p>
+<p>This web application is comprised of four Django apps and begins in the app named <i>login</i>, which features user functionality with login and logout logic from the <i>django.contrib.auth</i> library. Upon visiting the domain name, users are automatically redirected to the URL named <i>login</i>, which calls the view function <i>user_login</i>. This view function renders the <i>index</i> template of the <i>login</i> app and includes logic to authenticate users. If users are successfully authenticated, they are redirected to the <i>home</i> app. Two additional view functions <i>user_logout</i> and <i>user_signup</i> are implemented in the <i>login</i> app and are tied to their own URLs, namely <i>logout</i> and <i>signup</i>, respectively. The function <i>user_logout</i> immediately calls <i>logout()</i>, then has identical logic to <i>user_login</i> so that users can sign in again if they desire. The function <i>user_signup</i> renders the same <i>index</i> template but passes in a <i>form</i> as context. This form is a custom form that is explained in the next section.</p>
+<p>To implement sign up, I utilized a custom user creation form, namely <i>CustomUserCreationForm</i> which inherits from <i>UserCreationForm</i> (part of Django's forms library). Django's <i>UserCreationForm</i> is a <i>ModelForm</i> for the User model and has built-in logic for handling passwords safely. By calling <i>user.save()</i>, it ultimately creates a row in the <i>auth_user</i> table with the new user's credentials. It is a special form model because it includes <i>password1</i> and <i>password2</i> to handle password security. By default, <i>UserCreationForm</i> requires <i>username</i> and does not display the <i>user.first_name</i> and <i>user.last_name</i> fields, which is why I implemented <i>CustomUserCreationForm</i>. This custom form allows users to create their account, where they are required to fill out the <i>email</i>, <i>user.first_name</i>, and <i>user.last_name</i> fields. The <i>.pop()</i> method is used to remove the need for a username, since email is used instead. (However, the username field in the User model is automatically populated with the user's email.)</p>
+<p>The <i>home</i> app is the landing base of this web application. To ensure security, if a user is not authenticated or has logged out, entering the URL to this app will automatically redirect to the <i>login</i> app (explained in the first section). If the user has already been authenticated, they will not be redirected. Instead, the <i>index</i> template of the <i>home</i> app will be rendered, which is where you currently are in the site. The <i>home</i> app also has a <i>signals.py</i> file, which includes a signal function that is explained in the next section.</p>
+<p>This web appliction revolves around my Player model. A Player object is instantiated using a <i>post_save</i> signal function with the creation of every new user account. The <i>post_save</i> signal is a type of signal that triggers after any model's <i>.save()</i> method is used. After <i>user.save()</i>, a <i>post_save</i> signal is given by Django. Therefore, with every User object created, a Player object tied to that user will also be created. This Player model allows users to view their profile information, rating, and win-loss statistics.</p>
+<p>The <i>player</i> app is the most complex in my web application. Two models live in this app's <i>models.py</i> file: the Player model and Set model. The Player model will be explained first. It includes three fields, namely user, circle, and rating. The user field is a <i>OneToOneField</i> that ties the player to one specific user. The circle field is a <i>ForeignKey</i> (one-to-many relationship) that is set to null and blank by default. The rating field is an <i>IntegerField</i> with a default value of 1000 (a player's default rating is therefore 1000). In addition to the <i>__str__()</i> method, the Player model includes three methods: <i>sets()</i>, <i>wins()</i>, and <i>losses()</i>.</p>
+<p>As for the Set model, it has eight fields and includes methods that return the winner and loser of the set. The fields player_1 and player_2 are <i>ForeignKey</i> fields, and the player_1_games and player_2_games fields are self-explanatory. The date (which is a <i>DateField</i>) is automatically added. In addition, this model has the fields submitted_by and confirmed_by (both of which are <i>ForeignKey</i> fields). Finally, it features a <i>BooleanField</i> is_confirmed, which ensures that both players agree on a given score.</p>
+<p>The Set model would be useless without my custom <i>ScoreForm</i> and is therefore used as the model for this custom form. <i>ScoreForm</i> inherits from Django's <i>ModelForm</i> and allows users to submit individual tennis set scores, featuring <i>clean</i> logic to ensure that score submissions adhere to the traditional tennis rules. The fields to this model intentionally exclude the player_1 field. Instead, in the <i>score_submit</i> view, player_1 is automatically set to the current user's Player object to prevent cheating or confusion. Upon initialization, the queryset for the player_2 field is limited to players that are in the current user's Circle and, of course, also excludes the current user.</p>
+<p>Every Player is meant to be part of one (and only one) Circle. The <i>circle</i> app is the fourth and final app of this web application. The Circle model is central to this app but is simple: it has a name, a created_by field, and a unique code. The date on which the Circle was created is also automatically recorded. The <i>circle</i> app contains four view functions, namely <i>index</i>, <i>create_circle</i>, <i>join</i>, and <i>score_confirm</i>. The <i>index</i> view renders the <i>index</i> template and is given context: pending (sets that the user is yet to confirm), player (the current user's Player), and players (only if the current user is in a Circle). The <i>create_circle</i> view creates a Circle object and assigns the user's Player object to the newly created Circle. The <i>join</i> view is only called when the Circle's specific code is entered as a URL, and users who are not in a Circle will become part of the Circle upon using the URL. This allows users to share the link and grow their Circle. The <i>score_confirm</i> view simply renders a submitted set as legitimate, thereby setting the is_confirmed field of the Set object to True. It is called only when the appropriate user confirms a pending set.</p>
